@@ -31,11 +31,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Typecheck
-        run: pnpm -r typecheck
-
+      # Build first: it emits each package's dist/*.d.ts in topological order, so
+      # cross-package imports (e.g. @apex/shared) resolve during typecheck.
       - name: Build
         run: pnpm build
+
+      - name: Typecheck
+        run: pnpm -r typecheck
 
   rust-fmt:
     name: Desktop core (rustfmt)
