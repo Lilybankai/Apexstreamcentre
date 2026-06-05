@@ -8,7 +8,7 @@ Legend: 🟢 small (≤1 day) · 🟡 medium (2–4 days) · 🔴 large (1–2+ 
 ---
 
 ## Phase 1.5 — Harden the foundation (do these first)
-- [ ] **🟢 Wire the native engine: add `libobs`/`libobs-wrapper` deps and implement `LibObsBackend`** (replace the stub in `apps/desktop/src-tauri/src/engine.rs`). Validate on a Windows dev box: startup, scene create, display-capture source, preview surface, RTMP output.
+- [~] **🟢 Native engine: `LibObsBackend` implemented** (`apps/desktop/src-tauri/src/libobs_backend.rs`, `engine-libobs` feature) — worker-thread architecture, command channel, RTMP-URL parsing + tests, stub fallback. **Remaining (dev box):** first-compile reconcile of OBS call sites (`RECONCILE(1–3)`), add window/camera/audio/browser source builders + `remove_source` handle tracking, and end-to-end verify per `docs/NATIVE-ENGINE.md`.
 - [ ] **🟡 Stand up real auth in the gateway** — replace the token stub in `services/gateway/src/tokens.ts` with signed JWTs scoping overlays to a user's channels; verify on WS upgrade.
 - [ ] 🟢 Add unit tests for the spine: `hub.matches()` filtering, Twitch IRC tag parsing (`twitch.ts`), and `buildFanOut()` in `services/multistream`.
 - [ ] 🟢 Add a `cargo clippy` + `cargo check` CI job (install Tauri Linux deps + build frontend first so `generate_context!` finds `dist`).

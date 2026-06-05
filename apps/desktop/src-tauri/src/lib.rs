@@ -2,6 +2,8 @@
 
 mod commands;
 mod engine;
+#[cfg(feature = "engine-libobs")]
+mod libobs_backend;
 
 use engine::Engine;
 

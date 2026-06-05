@@ -58,12 +58,17 @@ Open `http://localhost:5180/chatbox.html` and `/alerts.html` in a browser — wi
 ### Desktop studio (dev)
 
 ```bash
-pnpm --filter @apex/desktop dev      # studio UI in the browser (engine mocked)
-pnpm --filter @apex/desktop tauri dev # native shell (needs Tauri + Rust toolchain)
+pnpm --filter @apex/desktop dev       # studio UI in the browser (engine mocked)
+pnpm --filter @apex/desktop tauri dev # native shell, StubBackend (no capture)
+
+# Real OBS engine (capture / encode / RTMP) — needs the OBS runtime + a GPU:
+cd apps/desktop && pnpm tauri dev --features engine-libobs
 ```
 
-The native build needs the [Tauri prerequisites](https://tauri.app/start/prerequisites/)
-and, for real capture, the OBS runtime + the `engine-libobs` feature.
+The native build needs the [Tauri prerequisites](https://tauri.app/start/prerequisites/).
+The real capture/encode path is built on **libobs** behind the `engine-libobs`
+feature — see **[`docs/NATIVE-ENGINE.md`](docs/NATIVE-ENGINE.md)** for the build,
+the worker-thread design, and end-to-end verification steps.
 
 ## Licensing
 

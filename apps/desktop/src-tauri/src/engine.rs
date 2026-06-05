@@ -233,8 +233,12 @@ impl Default for Engine {
 fn select_backend() -> Box<dyn Backend> {
     #[cfg(feature = "engine-libobs")]
     {
-        // On a dev box with the OBS runtime, swap in the libobs-backed engine.
-        // return Box::new(crate::libobs_backend::LibObsBackend::new());
+        // Drive the real OBS engine. If init fails (no runtime, no GPU, etc.)
+        // fall back to the stub so the app still launches and the UI works.
+        match crate::libobs_backend::LibObsBackend::new() {
+            Ok(b) => return Box::new(b),
+            Err(e) => eprintln!("[engine] libobs init failed ({e}); falling back to stub backend"),
+        }
     }
     Box::new(StubBackend)
 }
