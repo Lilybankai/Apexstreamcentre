@@ -1,0 +1,42 @@
+[package]
+name = "apexstreamcentre"
+version = "0.1.0"
+description = "ApexStreamCentre Studio — desktop streaming studio built on libobs"
+authors = ["ApexStreamCentre"]
+edition = "2021"
+rust-version = "1.77"
+# GPLv2: this binary links libobs (when the engine-libobs feature is enabled),
+# so the desktop client is distributed under GPLv2. See docs/LICENSING.md.
+license = "GPL-2.0-only"
+
+[lib]
+name = "apex_desktop_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Engine backend selection:
+#   default                  -> StubBackend (in-memory scene graph; no native deps).
+#   --features engine-libobs -> drives the real OBS engine via the libobs-rs crates
+#                               (see src/libobs_backend.rs). Build on a Windows/macOS
+#                               dev box with the OBS runtime; libobs-wrapper's
+#                               bootstrapper can fetch the runtime on first run.
+[features]
+default = []
+engine-libobs = ["dep:libobs-wrapper", "dep:libobs-simple"]
+
+# Native engine deps — only pulled when the engine-libobs feature is enabled.
+# Versions track OBS 32.x. The `+xx.y.z` build metadata is the bundled OBS version.
+[dependencies.libobs-wrapper]
+version = "9"
+optional = true
+
+[dependencies.libobs-simple]
+version = "8"
+optional = true

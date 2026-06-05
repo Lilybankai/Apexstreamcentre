@@ -1,0 +1,59 @@
+# Local development stack for ApexStreamCentre.
+#
+#   docker compose -f infra/docker-compose.yml up
+#
+# Brings up:
+#   * mediamtx        — RTMP ingest (:1935) + restream fan-out + API (:9997)
+#   * redis           — event bus / presence (used from P2 onward)
+#   * gateway         — WebSocket hub + REST (:8787)
+#   * chat-aggregator — Twitch/YouTube/Kick connectors -> gateway
+#
+# The node services bind-mount the repo and run with hot reload (tsx). Set
+# TWITCH_CHANNEL / SYNTHETIC in infra/.env (see .env.example).
+
+name: apexstreamcentre
+
+services:
+  mediamtx:
+    image: bluenviron/mediamtx:latest-ffmpeg
+    restart: unless-stopped
+    ports:
+      - '1935:1935' # RTMP ingest
+      - '9997:9997' # control API
+    volumes:
+      - ./mediamtx/mediamtx.yml:/mediamtx.yml:ro
+      - ./mediamtx/restream.sh:/scripts/restream.sh:ro
+      - ./mediamtx/destinations:/scripts/destinations:ro
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+
+  gateway:
+    image: node:22-slim
+    restart: unless-stopped
+    working_dir: /repo
+    command: sh -lc "corepack enable && pnpm install && pnpm --filter @apex/shared build && pnpm --filter @apex/gateway dev"
+    environment:
+      PORT: '8787'
+    ports:
+      - '8787:8787'
+    volumes:
+      - ..:/repo
+
+  chat-aggregator:
+    image: node:22-slim
+    restart: unless-stopped
+    working_dir: /repo
+    depends_on:
+      - gateway
+    command: sh -lc "corepack enable && pnpm install && pnpm --filter @apex/shared build && pnpm --filter @apex/chat-aggregator dev"
+    env_file:
+      - path: ./.env
+        required: false
+    environment:
+      GATEWAY_URL: ws://gateway:8787
+    volumes:
+      - ..:/repo

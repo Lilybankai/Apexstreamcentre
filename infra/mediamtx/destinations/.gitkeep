@@ -1,0 +1,5 @@
+# Per-path destination lists live here, e.g. infra/mediamtx/destinations/<path>.txt
+# with one RTMP/RTMPS URL per line:
+#   rtmp://live.twitch.tv/app/<twitch-stream-key>
+#   rtmp://a.rtmp.youtube.com/live2/<youtube-stream-key>
+# (managed by the multistream control plane in P2)

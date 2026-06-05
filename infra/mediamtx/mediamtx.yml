@@ -1,0 +1,28 @@
+# MediaMTX configuration for ApexStreamCentre ingest + restream fan-out.
+#
+# The desktop app publishes ONE RTMP stream to rtmp://<host>:1935/<path>. When a
+# path becomes ready, `runOnReady` invokes restream.sh, which spawns one ffmpeg
+# per destination doing a pure stream copy (no re-encode) to Twitch/YouTube/Kick.
+
+logLevel: info
+logDestinations: [stdout]
+
+# Protocols
+rtmp: yes
+rtmpAddress: :1935
+hls: no
+webrtc: no
+rtsp: no
+srt: no
+
+# API (used by the multistream control plane in P2 to reconcile live).
+api: yes
+apiAddress: :9997
+
+pathDefaults:
+  # $MTX_PATH is the published path name (e.g. a per-user stream id).
+  runOnReady: /scripts/restream.sh $MTX_PATH
+  runOnReadyRestart: yes
+
+paths:
+  all_others:

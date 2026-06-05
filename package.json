@@ -1,0 +1,28 @@
+{
+  "name": "apexstreamcentre",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ApexStreamCentre — a modern, lightweight streaming studio: scenes, interactive overlays, multistreaming, and unified chat/alerts.",
+  "license": "SEE docs/LICENSING.md",
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "pnpm -r --if-present lint",
+    "dev:stack": "docker compose -f infra/docker-compose.yml up",
+    "dev:gateway": "pnpm --filter @apex/gateway dev",
+    "dev:chat": "pnpm --filter @apex/chat-aggregator dev",
+    "dev:overlays": "pnpm --filter @apex/overlays dev",
+    "clean": "pnpm -r exec rm -rf dist node_modules/.cache"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3",
+    "typescript": "^5.6.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild"]
+  }
+}
