@@ -1,0 +1,82 @@
+/* Overlays render on top of video with a transparent background so OBS composites
+   them cleanly. Never set an opaque page background here. */
+:root {
+  --apex-accent: #8b5cff;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: transparent !important;
+  overflow: hidden;
+}
+
+/* ---- Platform colour accents ---- */
+.platform-twitch { --pf: #9146ff; }
+.platform-youtube { --pf: #ff0000; }
+.platform-kick { --pf: #53fc18; }
+
+/* ---- Alerts ---- */
+.alert-stage {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.alert-card {
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+  animation: alert-pop 600ms cubic-bezier(0.2, 0.9, 0.3, 1.4);
+}
+.alert-card .headline {
+  font-size: 2.6rem;
+  font-weight: 800;
+}
+.alert-card .who {
+  color: var(--apex-accent);
+}
+.alert-card .detail {
+  font-size: 1.3rem;
+  opacity: 0.85;
+  margin-top: 0.25rem;
+}
+@keyframes alert-pop {
+  0% { transform: translateY(40px) scale(0.8); opacity: 0; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* ---- Chat box ---- */
+.chatbox {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 420px;
+  max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: 12px;
+  box-sizing: border-box;
+}
+.chat-line {
+  background: rgba(17, 19, 26, 0.72);
+  border-left: 4px solid var(--pf, var(--apex-accent));
+  border-radius: 6px;
+  padding: 6px 10px;
+  color: #f3f4f8;
+  font-size: 1rem;
+  line-height: 1.35;
+  animation: chat-in 220ms ease-out;
+  word-break: break-word;
+}
+.chat-line .name { font-weight: 700; }
+.chat-line .emote { height: 1.4em; vertical-align: middle; }
+@keyframes chat-in {
+  from { transform: translateX(-12px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}

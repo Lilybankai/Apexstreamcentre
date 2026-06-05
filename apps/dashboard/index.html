@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ApexStreamCentre · Dashboard</title>
+    <style>
+      body { font-family: system-ui, sans-serif; background: #0e1016; color: #e7e9ee; margin: 0; }
+      main { max-width: 760px; margin: 0 auto; padding: 3rem 1.5rem; }
+      h1 { color: #8b5cff; }
+      .card { background: #161a24; border: 1px solid #232838; border-radius: 10px; padding: 1.25rem; margin: 1rem 0; }
+      .soon { color: #7a8194; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>ApexStreamCentre</h1>
+      <p>Creator dashboard — accounts, overlay marketplace, and multistream configuration.</p>
+      <div class="card"><div class="soon">Phase 2</div><strong>Multistream destinations</strong><p>Connect Twitch, YouTube &amp; Kick stream keys; one upload, fan out to all.</p></div>
+      <div class="card"><div class="soon">Phase 3</div><strong>Overlay marketplace</strong><p>Browse interactive overlays and install them straight into a scene.</p></div>
+      <div id="app"></div>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
