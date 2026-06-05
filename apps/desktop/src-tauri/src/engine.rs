@@ -77,7 +77,10 @@ impl Backend for StubBackend {
         log(&format!("set_active_scene({name})"));
     }
     fn add_source(&mut self, scene: &str, source: &Source) {
-        log(&format!("add_source({scene}, {:?} {})", source.kind, source.name));
+        log(&format!(
+            "add_source({scene}, {:?} {})",
+            source.kind, source.name
+        ));
     }
     fn remove_source(&mut self, scene: &str, name: &str) {
         log(&format!("remove_source({scene}, {name})"));
@@ -126,11 +129,21 @@ impl Engine {
                 state: SceneState {
                     active: "Main Scene".into(),
                     scenes: vec![
-                        Scene { name: "Main Scene".into(), sources: vec![display] },
-                        Scene { name: "Starting Soon".into(), sources: vec![] },
+                        Scene {
+                            name: "Main Scene".into(),
+                            sources: vec![display],
+                        },
+                        Scene {
+                            name: "Starting Soon".into(),
+                            sources: vec![],
+                        },
                     ],
                 },
-                stream: StreamStatus { live: false, ingest_url: None, started_at: None },
+                stream: StreamStatus {
+                    live: false,
+                    ingest_url: None,
+                    started_at: None,
+                },
                 backend,
             }),
         }
@@ -148,7 +161,10 @@ impl Engine {
         let mut g = self.inner.lock().unwrap();
         if !g.state.scenes.iter().any(|s| s.name == name) {
             g.backend.create_scene(name);
-            g.state.scenes.push(Scene { name: name.into(), sources: vec![] });
+            g.state.scenes.push(Scene {
+                name: name.into(),
+                sources: vec![],
+            });
         }
         g.state.clone()
     }
@@ -164,7 +180,11 @@ impl Engine {
 
     pub fn add_source(&self, scene: &str, kind: SourceKind, name: &str) -> SceneState {
         let mut g = self.inner.lock().unwrap();
-        let source = Source { name: name.into(), kind, url: None };
+        let source = Source {
+            name: name.into(),
+            kind,
+            url: None,
+        };
         g.backend.add_source(scene, &source);
         if let Some(s) = g.state.scenes.iter_mut().find(|s| s.name == scene) {
             s.sources.push(source);
@@ -195,7 +215,11 @@ impl Engine {
     pub fn stop_stream(&self) -> Result<StreamStatus, String> {
         let mut g = self.inner.lock().unwrap();
         g.backend.stop_output()?;
-        g.stream = StreamStatus { live: false, ingest_url: None, started_at: None };
+        g.stream = StreamStatus {
+            live: false,
+            ingest_url: None,
+            started_at: None,
+        };
         Ok(g.stream.clone())
     }
 }
@@ -217,5 +241,8 @@ fn select_backend() -> Box<dyn Backend> {
 
 fn now_ms() -> u64 {
     use std::time::{SystemTime, UNIX_EPOCH};
-    SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_millis() as u64).unwrap_or(0)
+    SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map(|d| d.as_millis() as u64)
+        .unwrap_or(0)
 }

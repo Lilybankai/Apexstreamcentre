@@ -19,7 +19,12 @@ pub fn set_active_scene(engine: State<Engine>, name: String) -> SceneState {
 }
 
 #[tauri::command]
-pub fn add_source(engine: State<Engine>, scene: String, kind: SourceKind, name: String) -> SceneState {
+pub fn add_source(
+    engine: State<Engine>,
+    scene: String,
+    kind: SourceKind,
+    name: String,
+) -> SceneState {
     engine.add_source(&scene, kind, &name)
 }
 
